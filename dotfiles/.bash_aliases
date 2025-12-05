@@ -24,6 +24,8 @@ alias gds='git diff --staged'
 alias gl='git log --oneline -20'
 alias glog='git log --oneline --graph --decorate'
 
+alias cl="claude --dangerously-skip-permissions"
+
 # Git functions
 gac() {
     git add --all && git commit -m "$1"
