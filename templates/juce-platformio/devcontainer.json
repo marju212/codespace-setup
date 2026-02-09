@@ -20,5 +20,5 @@
       }
     }
   },
-  "postCreateCommand": "source ~/.bash_aliases 2>/dev/null && mcp-merge .devcontainer/claude-settings.json; pio system info && cmake --version && g++ --version"
+  "postCreateCommand": "[ -d ~/.dotfiles ] || git clone https://github.com/marju212/codespace-setup ~/.dotfiles; ~/.dotfiles/install.sh; source ~/.bash_aliases 2>/dev/null && mcp-merge .devcontainer/claude-settings.json; pio system info && cmake --version && g++ --version"
 }

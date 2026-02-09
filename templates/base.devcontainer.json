@@ -12,5 +12,5 @@
       }
     }
   },
-  "postCreateCommand": "echo 'Base environment ready!'"
+  "postCreateCommand": "[ -d ~/.dotfiles ] || git clone https://github.com/marju212/codespace-setup ~/.dotfiles; ~/.dotfiles/install.sh; echo 'Base environment ready!'"
 }

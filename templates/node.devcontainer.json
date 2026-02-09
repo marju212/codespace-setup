@@ -11,5 +11,5 @@
       }
     }
   },
-  "postCreateCommand": "npm install 2>/dev/null || true"
+  "postCreateCommand": "[ -d ~/.dotfiles ] || git clone https://github.com/marju212/codespace-setup ~/.dotfiles; ~/.dotfiles/install.sh; npm install 2>/dev/null || true"
 }
