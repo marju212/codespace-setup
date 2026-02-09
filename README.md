@@ -22,14 +22,40 @@ git clone https://github.com/marju212/codespace-setup ~/.dotfiles
 After that, use `dotup` to pull future updates (see [Updating Existing Codespaces](#updating-existing-codespaces)).
 
 Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install:
-- Open the Command Palette (`Ctrl+Shift+P`) > **Codespaces: Rebuild Container**
+- Press `F1` > **Codespaces: Rebuild Container**
 
 ## What It Does
 
-- **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, Claude CLI alias)
+- **Installs `jq`** (needed for MCP merge functions)
+- **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, MCP tools, Claude CLI alias)
 - **Installs default VS Code extensions** (GitLens, Prettier, ESLint, Live Server, Markdown, ShellCheck, Python)
 - **Configures Claude Code MCP servers** (memory, filesystem, GitHub)
 - **Installs Claude Code** CLI via npm
+
+## Available Aliases
+
+### Git
+
+| Alias | Command |
+|-------|---------|
+| `gs` | `git status` |
+| `ga` / `gaa` | `git add` / `git add --all` |
+| `gc` / `gcm` | `git commit` / `git commit -m` |
+| `gp` / `gpl` | `git push` / `git pull` |
+| `gco` / `gcb` | `git checkout` / `git checkout -b` |
+| `gd` / `gds` | `git diff` / `git diff --staged` |
+| `gl` / `glog` | `git log --oneline` / `git log --graph` |
+| `gac "msg"` | `git add --all && git commit -m "msg"` |
+| `gacp "msg"` | `git add --all && git commit -m "msg" && git push` |
+
+### Tools
+
+| Alias | What it does |
+|-------|-------------|
+| `cl` | Run Claude Code with `--dangerously-skip-permissions` |
+| `dotup` | Pull latest dotfiles and reload aliases |
+| `mcp-merge [file]` | Merge MCP servers into project `.claude/settings.json` |
+| `mcp-list` | Show all active MCPs (project + global) |
 
 ## Project-Specific Environments
 
@@ -65,11 +91,12 @@ cp -r ~/.dotfiles/templates/juce-platformio .devcontainer
 Global (this repo)              Per-repo (.devcontainer/devcontainer.json)
 ├── Shell aliases               ├── Docker image / runtime
 ├── Default VS Code extensions  ├── Project-specific extensions
+├── Global MCP servers          ├── Project-specific MCP servers
 └── Claude Code CLI             ├── Dev tools (features)
                                 └── postCreateCommand (install deps)
 ```
 
-Global defaults apply to **all** Codespaces. Per-repo config only needs to add what's **specific** to that project — no need to repeat common extensions.
+Global defaults apply to **all** Codespaces. Per-repo config only needs to add what's **specific** to that project — no need to repeat common extensions or MCPs.
 
 ### Example: Adding a devcontainer to a Python project
 
@@ -104,9 +131,12 @@ Your files and git state are preserved — only the container environment is reb
 
 ## MCP Servers
 
-Claude Code MCP servers are configured in `claude-settings.json` and copied to `~/.claude/settings.json` on install.
+Claude Code MCP servers are configured at two levels:
 
-### Default MCPs
+- **Global** (`~/.claude/settings.json`) — applies to all projects, installed by `install.sh`
+- **Project** (`.claude/settings.json`) — per-repo, merged via `mcp-merge`
+
+### Default Global MCPs
 
 | Server | What it does |
 |--------|-------------|
@@ -114,9 +144,37 @@ Claude Code MCP servers are configured in `claude-settings.json` and copied to `
 | **filesystem** | Read/write access to `/workspaces` — Claude can browse and edit project files |
 | **github** | GitHub API access — Claude can manage issues, PRs, and repos |
 
+### Template MCPs
+
+Some templates include project-specific MCP servers, auto-merged on container creation:
+
+| Template | MCP | What it does |
+|----------|-----|-------------|
+| `juce-platformio` | **juce-docs** | JUCE Framework class documentation — search classes, get API docs from Stanford CCRMA |
+
+### Managing MCPs
+
+**List active MCPs:**
+
+```bash
+mcp-list
+```
+
+**Merge a template's MCPs into your project** (safe — won't overwrite existing MCPs):
+
+```bash
+mcp-merge .devcontainer/claude-settings.json
+```
+
+Without arguments, `mcp-merge` defaults to `.devcontainer/claude-settings.json`.
+
+**Edit global MCPs:**
+
+Edit `claude-settings.json` in this repo. Changes apply to new Codespaces automatically. For existing Codespaces, delete `~/.claude/settings.json` and re-run `~/.dotfiles/install.sh`.
+
 ### GitHub MCP Setup
 
-The GitHub MCP needs a personal access token. After install, add your token:
+The GitHub MCP needs a personal access token:
 
 1. Go to [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
 2. Create a token with `repo` scope
@@ -125,22 +183,6 @@ The GitHub MCP needs a personal access token. After install, add your token:
 ```json
 "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
 ```
-
-### Adding or Removing MCPs
-
-Edit `claude-settings.json` in this repo. Changes apply to new Codespaces automatically. For existing Codespaces, delete `~/.claude/settings.json` and re-run `~/.dotfiles/install.sh`.
-
-### Per-Project MCPs
-
-Add a `.claude/settings.json` to any repo for project-specific MCP servers. These are merged with the global config.
-
-### Template MCPs
-
-Some templates include their own MCP servers, auto-configured via `postCreateCommand`:
-
-| Template | MCP | What it does |
-|----------|-----|-------------|
-| `juce-platformio` | **juce-docs** | JUCE Framework class documentation — search classes, get API docs from Stanford CCRMA |
 
 ## Adding Dotfiles
 
