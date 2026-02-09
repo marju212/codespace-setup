@@ -94,17 +94,10 @@ Create `.devcontainer/devcontainer.json` in your project repo:
 
 After adding or changing a `devcontainer.json` (or its Dockerfile), you need to rebuild for changes to take effect.
 
-**From VS Code / browser:**
-1. Open the Command Palette: `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-2. Type and select **Codespaces: Rebuild Container**
+1. Press `F1` (or `Ctrl+Shift+P`) to open the Command Palette
+2. Type **rebuild** and select **Codespaces: Rebuild Container**
 
-**From GitHub CLI:**
-```bash
-gh codespace rebuild
-```
-
-**Full rebuild** (no cache, use when Dockerfile changes aren't picked up):
-1. Command Palette > **Codespaces: Full Rebuild Container**
+If Dockerfile changes aren't picked up, use **Codespaces: Full Rebuild Container** instead (rebuilds without cache).
 
 Your files and git state are preserved — only the container environment is rebuilt.
 
