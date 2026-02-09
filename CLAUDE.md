@@ -4,26 +4,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Setup scripts for configuring GitHub Codespaces environments with personal bash settings and Claude Code CLI.
+Personal dotfiles repository, automatically applied by GitHub Codespaces on creation.
 
-## Usage
+## How It Works
 
-In a new Codespace:
-```bash
-git clone https://github.com/marju212/codespace-setup ~/codespace-setup
-~/codespace-setup/setup.sh
-claude  # authenticate
-```
+GitHub Codespaces clones this repo and runs `install.sh` automatically when a Codespace is created (configured in GitHub Settings > Codespaces > Dotfiles).
 
 ## Structure
 
-- `setup.sh` - Main entry point, runs all setup scripts
-- `scripts/install-claude.sh` - Installs Claude Code via npm
-- `scripts/setup-bash.sh` - Adds source line to ~/.bashrc
-- `dotfiles/.bash_aliases` - Custom aliases (sourced by bashrc)
+- `install.sh` - Entry point, run automatically by Codespaces. Symlinks dotfiles and installs tools.
+- `.bash_aliases` - Custom shell aliases and functions (symlinked to `~/.bash_aliases`)
 
 ## Design Principles
 
-- All scripts are idempotent (safe to re-run)
-- Bashrc sources aliases from repo path, so `git pull` updates take effect without re-running setup
+- `install.sh` is idempotent (safe to re-run)
+- Dotfiles are symlinked, so `git pull` in the dotfiles repo updates them without re-running install
 - Scripts use `set -e` to fail fast on errors
+- New dotfiles just need to be added to the repo root and the `install.sh` loop

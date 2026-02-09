@@ -1,37 +1,36 @@
-# codespace-setup
+# dotfiles
 
-Setup scripts for configuring GitHub Codespaces with personal bash settings and Claude Code.
+Personal dotfiles for GitHub Codespaces. Automatically applied when creating any new Codespace.
 
-## Quick Start
+## Setup (one-time)
 
-In any new Codespace, run:
+1. Go to [GitHub Settings > Codespaces](https://github.com/settings/codespaces)
+2. Under **Dotfiles**, check "Automatically install dotfiles"
+3. Select this repository (`marju212/codespace-setup`)
 
-```bash
-git clone https://github.com/marju212/codespace-setup ~/codespace-setup
-~/codespace-setup/setup.sh
-```
-
-Then authenticate Claude Code:
-
-```bash
-claude
-```
+That's it. Every new Codespace will automatically run `install.sh` and configure your environment.
 
 ## What It Does
 
-- **Installs Claude Code** - CLI tool via npm
-- **Configures bash** - Sources custom aliases from this repo
+- **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, Claude CLI alias)
+- **Installs Claude Code** CLI via npm
 
-## Updating
+## Adding Dotfiles
 
-After making changes to this repo, pull updates in your Codespace:
+Add new dotfiles (e.g., `.gitconfig`, `.vimrc`) to the repo root and add them to the `install.sh` loop:
 
 ```bash
-cd ~/codespace-setup && git pull
+for file in .bash_aliases .gitconfig .vimrc; do
 ```
 
-Alias changes take effect in new terminals. For other changes, re-run `setup.sh`.
+## Manual Run
+
+If you need to re-run in an existing Codespace:
+
+```bash
+~/.dotfiles/install.sh
+```
 
 ## Customization
 
-Add your aliases to `dotfiles/.bash_aliases`.
+Edit `.bash_aliases` to add or change aliases. Changes take effect in new Codespaces automatically, or run `source ~/.bash_aliases` in existing ones.
