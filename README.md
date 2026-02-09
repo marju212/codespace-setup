@@ -54,6 +54,7 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 |-------|-------------|
 | `cl` | Run Claude Code with `--dangerously-skip-permissions` |
 | `dotup` | Pull latest dotfiles and reload aliases |
+| `use-template <name>` | Apply a devcontainer template to current project |
 | `mcp-merge [file]` | Merge MCP servers into project `.claude/settings.json` |
 | `mcp-list` | Show all active MCPs (project + global) |
 
@@ -63,18 +64,13 @@ This repo provides your **global** defaults. For project-specific environments, 
 
 ### Using a Template
 
-For simple templates (single file):
+The easiest way is the `use-template` alias:
 
 ```bash
-mkdir -p .devcontainer
-cp ~/.dotfiles/templates/<template>.devcontainer.json .devcontainer/devcontainer.json
+use-template juce-platformio
 ```
 
-For templates with a Dockerfile (e.g., `juce-platformio`):
-
-```bash
-cp -r ~/.dotfiles/templates/juce-platformio .devcontainer
-```
+Run `use-template` without arguments to list all available templates. Then rebuild the Codespace (`F1` > **Codespaces: Rebuild Container**).
 
 ### Available Templates
 

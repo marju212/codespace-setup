@@ -55,6 +55,15 @@ else
     echo "    Claude settings already exist, skipping (edit ~/.claude/settings.json to update)"
 fi
 
+# Install Node.js if not available
+if ! command -v npm &> /dev/null; then
+    echo ""
+    echo "==> Installing Node.js..."
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - > /dev/null 2>&1
+    sudo apt-get install -y -qq nodejs > /dev/null 2>&1
+    echo "    Node.js $(node --version) installed"
+fi
+
 # Install Claude Code
 echo ""
 echo "==> Checking Claude Code installation..."

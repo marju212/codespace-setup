@@ -29,6 +29,29 @@ alias cl="claude --dangerously-skip-permissions"
 # Dotfiles
 alias dotup='git -C ~/.dotfiles pull && source ~/.bash_aliases && echo "Dotfiles updated!"'
 
+# Template management
+use-template() {
+    local template="$1"
+    if [ -z "$template" ]; then
+        echo "Available templates:" && ls ~/.dotfiles/templates/ 2>/dev/null
+        echo "" && echo "Usage: use-template <name>"
+        return 1
+    fi
+    local src="$HOME/.dotfiles/templates/$template"
+    if [ ! -e "$src" ]; then
+        echo "Template not found: $template" && return 1
+    fi
+    rm -rf .devcontainer
+    if [ -d "$src" ]; then
+        cp -r "$src" .devcontainer
+    else
+        mkdir -p .devcontainer
+        cp "$src" .devcontainer/devcontainer.json
+    fi
+    echo "Template '$template' applied to .devcontainer/"
+    echo "Rebuild the Codespace: F1 > Codespaces: Rebuild Container"
+}
+
 # MCP management
 mcp-merge() {
     local src="${1:-.devcontainer/claude-settings.json}"
