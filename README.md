@@ -13,7 +13,61 @@ That's it. Every new Codespace will automatically run `install.sh` and configure
 ## What It Does
 
 - **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, Claude CLI alias)
+- **Installs default VS Code extensions** (GitLens, Prettier, ESLint, Live Server, Markdown, ShellCheck, Python)
 - **Installs Claude Code** CLI via npm
+
+## Project-Specific Environments
+
+This repo provides your **global** defaults. For project-specific environments, add a `devcontainer.json` to that repo. Both layers work together — the devcontainer sets up the tools, and your dotfiles apply on top.
+
+### Using a Template
+
+Copy a template into your project repo:
+
+```bash
+mkdir -p .devcontainer
+cp ~/.dotfiles/templates/<template>.devcontainer.json .devcontainer/devcontainer.json
+```
+
+### Available Templates
+
+| Template | Image | Use case |
+|----------|-------|----------|
+| `base` | `universal:2` | Multi-language (Node + Python + common CLIs) |
+| `python` | `python:3.12` | Python projects (+ pylint, black) |
+| `node` | `javascript-node:22` | Node/JS projects (+ Tailwind CSS) |
+
+### How the Layers Work
+
+```
+Global (this repo)              Per-repo (.devcontainer/devcontainer.json)
+├── Shell aliases               ├── Docker image / runtime
+├── Default VS Code extensions  ├── Project-specific extensions
+└── Claude Code CLI             ├── Dev tools (features)
+                                └── postCreateCommand (install deps)
+```
+
+Global defaults apply to **all** Codespaces. Per-repo config only needs to add what's **specific** to that project — no need to repeat common extensions.
+
+### Example: Adding a devcontainer to a Python project
+
+Create `.devcontainer/devcontainer.json` in your project repo:
+
+```json
+{
+  "name": "My Python App",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.pylint"]
+    }
+  },
+  "postCreateCommand": "pip install -r requirements.txt"
+}
+```
 
 ## Adding Dotfiles
 
@@ -23,13 +77,15 @@ Add new dotfiles (e.g., `.gitconfig`, `.vimrc`) to the repo root and add them to
 for file in .bash_aliases .gitconfig .vimrc; do
 ```
 
-## Manual Run
+## Updating Existing Codespaces
 
-If you need to re-run in an existing Codespace:
+New Codespaces get the latest automatically. For running Codespaces:
 
 ```bash
-~/.dotfiles/install.sh
+dotup
 ```
+
+This alias pulls the latest dotfiles and reloads your aliases.
 
 ## Customization
 

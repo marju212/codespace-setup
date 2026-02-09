@@ -20,6 +20,22 @@ for file in .bash_aliases; do
     fi
 done
 
+# Install default VS Code extensions
+echo ""
+echo "==> Installing default VS Code extensions..."
+EXTENSIONS=(
+    eamodio.gitlens
+    esbenp.prettier-vscode
+    dbaeumer.vscode-eslint
+    ms-vscode.live-server
+    yzhang.markdown-all-in-one
+    timonwong.shellcheck
+    ms-python.python
+)
+for ext in "${EXTENSIONS[@]}"; do
+    code --install-extension "$ext" --force 2>/dev/null && echo "    Installed $ext" || true
+done
+
 # Install Claude Code
 echo ""
 echo "==> Checking Claude Code installation..."
