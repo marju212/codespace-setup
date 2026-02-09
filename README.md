@@ -10,6 +10,20 @@ Personal dotfiles for GitHub Codespaces. Automatically applied when creating any
 
 That's it. Every new Codespace will automatically run `install.sh` and configure your environment.
 
+## Applying to Existing Codespaces
+
+Dotfiles are only auto-applied when a Codespace is **created**. For Codespaces that already exist:
+
+```bash
+git clone https://github.com/marju212/codespace-setup ~/.dotfiles
+~/.dotfiles/install.sh
+```
+
+After that, use `dotup` to pull future updates (see [Updating Existing Codespaces](#updating-existing-codespaces)).
+
+Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install:
+- Open the Command Palette (`Ctrl+Shift+P`) > **Codespaces: Rebuild Container**
+
 ## What It Does
 
 - **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, Claude CLI alias)
