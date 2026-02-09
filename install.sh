@@ -43,18 +43,6 @@ for ext in "${EXTENSIONS[@]}"; do
     code --install-extension "$ext" --force 2>/dev/null && echo "    Installed $ext" || true
 done
 
-# Configure Claude Code MCP servers
-echo ""
-echo "==> Configuring Claude Code MCP servers..."
-CLAUDE_DIR="$HOME/.claude"
-mkdir -p "$CLAUDE_DIR"
-if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
-    cp "$DOTFILES_DIR/claude-settings.json" "$CLAUDE_DIR/settings.json"
-    echo "    Installed default MCP config to $CLAUDE_DIR/settings.json"
-else
-    echo "    Claude settings already exist, skipping (edit ~/.claude/settings.json to update)"
-fi
-
 # Install Node.js if not available
 if ! command -v npm &> /dev/null; then
     echo ""
@@ -73,6 +61,17 @@ else
     echo "    Installing Claude Code..."
     sudo npm install -g @anthropic-ai/claude-code
     echo "    Claude Code installed successfully"
+fi
+
+# Configure global MCP servers
+echo ""
+echo "==> Configuring global MCP servers..."
+if command -v claude &> /dev/null; then
+    claude mcp add --scope global memory -- npx -y @modelcontextprotocol/server-memory 2>/dev/null && echo "    Added memory MCP" || true
+    claude mcp add --scope global filesystem -- npx -y @modelcontextprotocol/server-filesystem /workspaces 2>/dev/null && echo "    Added filesystem MCP" || true
+    claude mcp add --scope global github -- npx -y @modelcontextprotocol/server-github 2>/dev/null && echo "    Added github MCP" || true
+else
+    echo "    Skipping MCP setup (Claude Code not installed)"
 fi
 
 echo ""
