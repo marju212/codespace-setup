@@ -11,6 +11,13 @@ echo "  Codespace Dotfiles Setup"
 echo "=========================================="
 echo ""
 
+# Ensure jq is available (needed for mcp-merge)
+if ! command -v jq &> /dev/null; then
+    echo "==> Installing jq..."
+    sudo apt-get update -qq && sudo apt-get install -y -qq jq > /dev/null 2>&1
+    echo "    jq installed"
+fi
+
 # Symlink dotfiles
 echo "==> Linking dotfiles..."
 for file in .bash_aliases; do
@@ -35,6 +42,18 @@ EXTENSIONS=(
 for ext in "${EXTENSIONS[@]}"; do
     code --install-extension "$ext" --force 2>/dev/null && echo "    Installed $ext" || true
 done
+
+# Configure Claude Code MCP servers
+echo ""
+echo "==> Configuring Claude Code MCP servers..."
+CLAUDE_DIR="$HOME/.claude"
+mkdir -p "$CLAUDE_DIR"
+if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
+    cp "$DOTFILES_DIR/claude-settings.json" "$CLAUDE_DIR/settings.json"
+    echo "    Installed default MCP config to $CLAUDE_DIR/settings.json"
+else
+    echo "    Claude settings already exist, skipping (edit ~/.claude/settings.json to update)"
+fi
 
 # Install Claude Code
 echo ""

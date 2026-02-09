@@ -28,6 +28,7 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 
 - **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, Claude CLI alias)
 - **Installs default VS Code extensions** (GitLens, Prettier, ESLint, Live Server, Markdown, ShellCheck, Python)
+- **Configures Claude Code MCP servers** (memory, filesystem, GitHub)
 - **Installs Claude Code** CLI via npm
 
 ## Project-Specific Environments
@@ -100,6 +101,46 @@ After adding or changing a `devcontainer.json` (or its Dockerfile), you need to 
 If Dockerfile changes aren't picked up, use **Codespaces: Full Rebuild Container** instead (rebuilds without cache).
 
 Your files and git state are preserved — only the container environment is rebuilt.
+
+## MCP Servers
+
+Claude Code MCP servers are configured in `claude-settings.json` and copied to `~/.claude/settings.json` on install.
+
+### Default MCPs
+
+| Server | What it does |
+|--------|-------------|
+| **memory** | Persistent knowledge graph — Claude remembers context across conversations |
+| **filesystem** | Read/write access to `/workspaces` — Claude can browse and edit project files |
+| **github** | GitHub API access — Claude can manage issues, PRs, and repos |
+
+### GitHub MCP Setup
+
+The GitHub MCP needs a personal access token. After install, add your token:
+
+1. Go to [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
+2. Create a token with `repo` scope
+3. Edit `~/.claude/settings.json` and set the token:
+
+```json
+"GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+```
+
+### Adding or Removing MCPs
+
+Edit `claude-settings.json` in this repo. Changes apply to new Codespaces automatically. For existing Codespaces, delete `~/.claude/settings.json` and re-run `~/.dotfiles/install.sh`.
+
+### Per-Project MCPs
+
+Add a `.claude/settings.json` to any repo for project-specific MCP servers. These are merged with the global config.
+
+### Template MCPs
+
+Some templates include their own MCP servers, auto-configured via `postCreateCommand`:
+
+| Template | MCP | What it does |
+|----------|-----|-------------|
+| `juce-platformio` | **juce-docs** | JUCE Framework class documentation — search classes, get API docs from Stanford CCRMA |
 
 ## Adding Dotfiles
 

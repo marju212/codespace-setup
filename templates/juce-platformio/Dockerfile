@@ -31,6 +31,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     python3-pip \
     python3-venv \
     # Utilities
+    jq \
     usbutils \
     screen \
     minicom \
@@ -43,3 +44,8 @@ RUN pip3 install --no-cache-dir platformio
 # Pre-install PlatformIO platforms and toolchains for RP2040 and Teensy
 RUN pio platform install "raspberrypi" --with-package "framework-arduino-mbed-rp2040" \
     && pio platform install "teensy" --with-package "framework-arduinoteensy"
+
+# Install JUCE Docs MCP server
+RUN git clone https://github.com/josmithiii/mcp-servers-jos.git /opt/juce-docs-mcp \
+    && cd /opt/juce-docs-mcp/juce-docs-mcp-server \
+    && npm install && npm run build
