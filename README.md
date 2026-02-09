@@ -36,11 +36,17 @@ This repo provides your **global** defaults. For project-specific environments, 
 
 ### Using a Template
 
-Copy a template into your project repo:
+For simple templates (single file):
 
 ```bash
 mkdir -p .devcontainer
 cp ~/.dotfiles/templates/<template>.devcontainer.json .devcontainer/devcontainer.json
+```
+
+For templates with a Dockerfile (e.g., `juce-platformio`):
+
+```bash
+cp -r ~/.dotfiles/templates/juce-platformio .devcontainer
 ```
 
 ### Available Templates
@@ -50,6 +56,7 @@ cp ~/.dotfiles/templates/<template>.devcontainer.json .devcontainer/devcontainer
 | `base` | `universal:2` | Multi-language (Node + Python + common CLIs) |
 | `python` | `python:3.12` | Python projects (+ pylint, black) |
 | `node` | `javascript-node:22` | Node/JS projects (+ Tailwind CSS) |
+| `juce-platformio` | `cpp:ubuntu-22.04` + Dockerfile | C++ JUCE audio/GUI + PlatformIO (RP2040-Zero, Teensy 4.1) |
 
 ### How the Layers Work
 
@@ -82,6 +89,24 @@ Create `.devcontainer/devcontainer.json` in your project repo:
   "postCreateCommand": "pip install -r requirements.txt"
 }
 ```
+
+## Rebuilding a Codespace
+
+After adding or changing a `devcontainer.json` (or its Dockerfile), you need to rebuild for changes to take effect.
+
+**From VS Code / browser:**
+1. Open the Command Palette: `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+2. Type and select **Codespaces: Rebuild Container**
+
+**From GitHub CLI:**
+```bash
+gh codespace rebuild
+```
+
+**Full rebuild** (no cache, use when Dockerfile changes aren't picked up):
+1. Command Palette > **Codespaces: Full Rebuild Container**
+
+Your files and git state are preserved — only the container environment is rebuilt.
 
 ## Adding Dotfiles
 

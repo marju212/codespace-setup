@@ -1,0 +1,24 @@
+{
+  "name": "C++ JUCE + PlatformIO",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "platformio.platformio-ide",
+        "ms-vscode.cpptools-extension-pack"
+      ],
+      "settings": {
+        "cmake.generator": "Ninja",
+        "C_Cpp.default.compilerPath": "/usr/bin/g++",
+        "C_Cpp.default.cppStandard": "c++17",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "postCreateCommand": "pio system info && cmake --version && g++ --version"
+}
