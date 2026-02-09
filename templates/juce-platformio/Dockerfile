@@ -45,6 +45,11 @@ RUN pip3 install --no-cache-dir platformio
 RUN pio platform install "raspberrypi" --with-package "framework-arduino-mbed-rp2040" \
     && pio platform install "teensy" --with-package "framework-arduinoteensy"
 
+# Install Node.js (needed for JUCE Docs MCP server)
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install JUCE Docs MCP server
 RUN git clone https://github.com/josmithiii/mcp-servers-jos.git /opt/juce-docs-mcp \
     && cd /opt/juce-docs-mcp/juce-docs-mcp-server \
