@@ -26,6 +26,9 @@ alias glog='git log --oneline --graph --decorate'
 
 alias cl="claude --dangerously-skip-permissions"
 
+# Dotfiles
+alias dotup='git -C ~/.dotfiles pull && source ~/.bash_aliases && echo "Dotfiles updated!"'
+
 # Git functions
 gac() {
     git add --all && git commit -m "$1"
