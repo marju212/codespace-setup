@@ -24,7 +24,8 @@ alias gds='git diff --staged'
 alias gl='git log --oneline -20'
 alias glog='git log --oneline --graph --decorate'
 
-alias cl="claude --dangerously-skip-permissions"
+# shellcheck disable=SC2139
+alias cl="$HOME/.local/bin/claude --dangerously-skip-permissions"
 
 # Dotfiles
 alias dotup='git -C ~/.dotfiles pull && source ~/.bash_aliases && echo "Dotfiles updated!"'

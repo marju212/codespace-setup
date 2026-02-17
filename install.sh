@@ -52,14 +52,20 @@ if ! command -v npm &> /dev/null; then
     echo "    Node.js $(node --version) installed"
 fi
 
-# Install Claude Code
+# Install Claude Code (native installer)
 echo ""
 echo "==> Checking Claude Code installation..."
-if command -v claude &> /dev/null; then
-    echo "    Claude Code already installed: $(claude --version 2>/dev/null || echo 'version unknown')"
+# Remove legacy npm installation if present
+if npm list -g @anthropic-ai/claude-code &> /dev/null; then
+    echo "    Removing npm-based Claude Code..."
+    sudo npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || npm uninstall -g @anthropic-ai/claude-code 2>/dev/null || true
+    echo "    npm version removed"
+fi
+if [ -x "$HOME/.local/bin/claude" ]; then
+    echo "    Claude Code already installed: $($HOME/.local/bin/claude --version 2>/dev/null || echo 'version unknown')"
 else
-    echo "    Installing Claude Code..."
-    sudo npm install -g @anthropic-ai/claude-code
+    echo "    Installing Claude Code via native installer..."
+    curl -fsSL https://claude.ai/install.sh | bash
     echo "    Claude Code installed successfully"
 fi
 

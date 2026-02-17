@@ -30,7 +30,7 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 - **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, MCP tools, Claude CLI alias)
 - **Installs default VS Code extensions** (GitLens, Prettier, ESLint, Live Server, Markdown, ShellCheck, Python)
 - **Configures Claude Code MCP servers** (memory, filesystem, GitHub)
-- **Installs Claude Code** CLI via npm
+- **Installs Claude Code** CLI via native installer (auto-removes legacy npm version if present)
 
 ## Available Aliases
 
