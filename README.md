@@ -1,5 +1,9 @@
 # dotfiles
 
+https://www.aitmpl.com/agents
+
+https://github.com/msitarzewski/agency-agents
+
 Personal dotfiles for GitHub Codespaces. Automatically applied when creating any new Codespace.
 
 ## Setup (one-time)
