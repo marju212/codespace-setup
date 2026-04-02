@@ -31,7 +31,7 @@ clt() {
 }
 
 # Dotfiles
-alias dotup='git -C ~/.dotfiles pull && source ~/.bash_aliases && echo "Dotfiles updated!"'
+alias dotup='git -C ~/.dotfiles pull && ~/.dotfiles/install.sh && source ~/.bash_aliases && echo "Dotfiles updated!"'
 
 # Template management
 use-template() {
