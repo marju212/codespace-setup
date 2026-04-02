@@ -26,6 +26,9 @@ alias glog='git log --oneline --graph --decorate'
 
 # shellcheck disable=SC2139
 alias cl="$HOME/.local/bin/claude --dangerously-skip-permissions"
+clt() {
+    CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 "$HOME/.local/bin/claude" --dangerously-skip-permissions "$@"
+}
 
 # Dotfiles
 alias dotup='git -C ~/.dotfiles pull && source ~/.bash_aliases && echo "Dotfiles updated!"'

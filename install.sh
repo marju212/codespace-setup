@@ -11,6 +11,11 @@ echo "  Codespace Dotfiles Setup"
 echo "=========================================="
 echo ""
 
+# Remove problematic yarn source and install dependencies
+echo "==> Installing system dependencies..."
+sudo rm /etc/apt/sources.list.d/yarn.list 2>/dev/null
+sudo apt update && sudo apt install tmux -y
+
 # Ensure jq is available (needed for mcp-merge)
 if ! command -v jq &> /dev/null; then
     echo "==> Installing jq..."

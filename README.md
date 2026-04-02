@@ -57,6 +57,7 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 | Alias | What it does |
 |-------|-------------|
 | `cl` | Run Claude Code with `--dangerously-skip-permissions` |
+| `clt` | Run Claude Code with teams enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
 | `dotup` | Pull latest dotfiles and reload aliases |
 | `use-template <name>` | Apply a devcontainer template to current project |
 | `mcp-merge [file]` | Merge MCP servers into project `.claude/settings.json` |
