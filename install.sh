@@ -13,7 +13,7 @@ echo ""
 
 # Remove problematic yarn source and install dependencies
 echo "==> Installing system dependencies..."
-sudo rm /etc/apt/sources.list.d/yarn.list 2>/dev/null
+sudo rm /etc/apt/sources.list.d/yarn.list 2>/dev/null || true
 sudo apt update && sudo apt install tmux -y
 
 # Ensure jq is available (needed for mcp-merge)
