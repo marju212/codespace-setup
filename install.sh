@@ -5,6 +5,12 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOCAL_BIN="$HOME/.local/bin"
+
+case ":$PATH:" in
+    *":$LOCAL_BIN:"*) ;;
+    *) export PATH="$LOCAL_BIN:$PATH" ;;
+esac
 
 echo "=========================================="
 echo "  Codespace Dotfiles Setup"
@@ -31,6 +37,28 @@ for file in .bash_aliases; do
         echo "    Linked $file -> $HOME/$file"
     fi
 done
+
+# Link Claude and Codex instruction files in workspace repositories
+echo ""
+echo "==> Linking Claude/Codex instruction files..."
+if [ -d /workspaces ]; then
+    for repo_dir in /workspaces/*; do
+        [ -d "$repo_dir" ] || continue
+
+        claude_file="$repo_dir/CLAUDE.md"
+        agents_file="$repo_dir/AGENTS.md"
+
+        if [ -e "$claude_file" ] && [ ! -e "$agents_file" ] && [ ! -L "$agents_file" ]; then
+            ln -s CLAUDE.md "$agents_file"
+            echo "    Linked $agents_file -> CLAUDE.md"
+        elif [ -e "$agents_file" ] && [ ! -e "$claude_file" ] && [ ! -L "$claude_file" ]; then
+            ln -s AGENTS.md "$claude_file"
+            echo "    Linked $claude_file -> AGENTS.md"
+        fi
+    done
+else
+    echo "    Skipping instruction links (/workspaces not found)"
+fi
 
 # Install default VS Code extensions
 echo ""
@@ -74,6 +102,17 @@ else
     echo "    Claude Code installed successfully"
 fi
 
+# Install Codex CLI (native installer)
+echo ""
+echo "==> Checking Codex CLI installation..."
+if command -v codex &> /dev/null; then
+    echo "    Codex CLI already installed: $(codex --version 2>/dev/null || echo 'version unknown')"
+else
+    echo "    Installing Codex CLI via native installer..."
+    curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh
+    echo "    Codex CLI installed successfully"
+fi
+
 # Configure global MCP servers
 echo ""
 echo "==> Configuring global MCP servers..."
@@ -92,3 +131,4 @@ echo "=========================================="
 echo ""
 echo "Next steps:"
 echo "  Run 'claude' to authenticate (required once per Codespace)"
+echo "  Run 'codex' to authenticate (required once per Codespace)"

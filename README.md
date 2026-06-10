@@ -32,9 +32,11 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 
 - **Installs `jq`** (needed for MCP merge functions)
 - **Symlinks `.bash_aliases`** to `~/` (git shortcuts, navigation aliases, MCP tools, Claude CLI alias)
+- **Links `CLAUDE.md` and `AGENTS.md`** in workspace repos when only one exists
 - **Installs default VS Code extensions** (GitLens, Prettier, ESLint, Live Server, Markdown, ShellCheck, Python)
 - **Configures Claude Code MCP servers** (memory, filesystem, GitHub)
 - **Installs Claude Code** CLI via native installer (auto-removes legacy npm version if present)
+- **Installs Codex CLI** via the native OpenAI installer
 
 ## Available Aliases
 
@@ -57,6 +59,7 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 | Alias | What it does |
 |-------|-------------|
 | `cl` | Run Claude Code with `--dangerously-skip-permissions` |
+| `cx` | Run Codex with `--dangerously-bypass-approvals-and-sandbox` |
 | `clt` | Run Claude Code with teams enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
 | `dotup` | Pull latest dotfiles and reload aliases |
 | `use-template <name>` | Apply a devcontainer template to current project |
@@ -93,7 +96,7 @@ Global (this repo)              Per-repo (.devcontainer/devcontainer.json)
 ├── Shell aliases               ├── Docker image / runtime
 ├── Default VS Code extensions  ├── Project-specific extensions
 ├── Global MCP servers          ├── Project-specific MCP servers
-└── Claude Code CLI             ├── Dev tools (features)
+└── Claude Code + Codex CLIs     ├── Dev tools (features)
                                 └── postCreateCommand (install deps)
 ```
 
