@@ -37,6 +37,7 @@ Alternatively, you can rebuild the Codespace to trigger a fresh dotfiles install
 - **Configures Claude Code MCP servers** (memory, filesystem, GitHub)
 - **Installs Claude Code** CLI via native installer (auto-removes legacy npm version if present)
 - **Installs Codex CLI** via the native OpenAI installer
+- **Installs Herdr** (terminal workspace manager for AI coding agents) via the native installer
 
 ## Available Aliases
 
@@ -96,7 +97,7 @@ Global (this repo)              Per-repo (.devcontainer/devcontainer.json)
 ├── Shell aliases               ├── Docker image / runtime
 ├── Default VS Code extensions  ├── Project-specific extensions
 ├── Global MCP servers          ├── Project-specific MCP servers
-└── Claude Code + Codex CLIs     ├── Dev tools (features)
+└── Claude Code, Codex, Herdr    ├── Dev tools (features)
                                 └── postCreateCommand (install deps)
 ```
 

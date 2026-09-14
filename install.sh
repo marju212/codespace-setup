@@ -129,6 +129,17 @@ else
     echo "    Codex CLI installed successfully"
 fi
 
+# Install Herdr (terminal workspace manager for AI coding agents)
+echo ""
+echo "==> Checking Herdr installation..."
+if command -v herdr &> /dev/null; then
+    echo "    Herdr already installed: $(herdr --version 2>/dev/null || echo 'version unknown')"
+else
+    echo "    Installing Herdr via native installer..."
+    curl -fsSL https://herdr.dev/install.sh | sh
+    echo "    Herdr installed successfully"
+fi
+
 # Configure global MCP servers
 echo ""
 echo "==> Configuring global MCP servers..."
