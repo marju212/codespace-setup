@@ -4,6 +4,19 @@
 
 set -e
 
+# Vänta ut andra apt-processer (Coder kör moduler parallellt)
+apt_retry() {
+    local i
+    for i in $(seq 1 60); do
+        if sudo apt-get -o DPkg::Lock::Timeout=120 "$@"; then
+            return 0
+        fi
+        echo "    apt är låst, väntar 10 s..."
+        sleep 10
+    done
+    return 1
+}
+
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_BIN="$HOME/.local/bin"
 
@@ -20,12 +33,13 @@ echo ""
 # Remove problematic yarn source and install dependencies
 echo "==> Installing system dependencies..."
 sudo rm /etc/apt/sources.list.d/yarn.list 2>/dev/null || true
-sudo apt update && sudo apt install tmux -y
+apt_retry update -qq
+apt_retry install -y -qq tmux
 
 # Ensure jq is available (needed for mcp-merge)
 if ! command -v jq &> /dev/null; then
     echo "==> Installing jq..."
-    sudo apt-get update -qq && sudo apt-get install -y -qq jq > /dev/null 2>&1
+    apt_retry install -y -qq jq > /dev/null 2>&1
     echo "    jq installed"
 fi
 
@@ -83,7 +97,7 @@ if ! command -v npm &> /dev/null; then
     echo ""
     echo "==> Installing Node.js..."
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - > /dev/null 2>&1
-    sudo apt-get install -y -qq nodejs > /dev/null 2>&1
+    apt_retry install -y -qq nodejs > /dev/null 2>&1
     echo "    Node.js $(node --version) installed"
 fi
 
