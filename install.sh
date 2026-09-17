@@ -45,8 +45,12 @@ fi
 
 # Symlink dotfiles
 echo "==> Linking dotfiles..."
-# Ensure ~/.dotfiles points at this repo (Codespaces uses it, Coder does not) so the dotup alias works
-[ -e "$HOME/.dotfiles" ] || ln -s "$DOTFILES_DIR" "$HOME/.dotfiles"
+# Ensure ~/.dotfiles points at this repo (Codespaces uses it, Coder does not) so the dotup alias works.
+# Repoint an existing symlink (it may dangle after a home directory move, e.g. /home/coder -> /home/incore);
+# leave a real directory alone (Codespaces clones straight into ~/.dotfiles).
+if [ -L "$HOME/.dotfiles" ] || [ ! -e "$HOME/.dotfiles" ]; then
+    ln -sfn "$DOTFILES_DIR" "$HOME/.dotfiles"
+fi
 for file in .bash_aliases; do
     if [ -f "$DOTFILES_DIR/$file" ]; then
         ln -sf "$DOTFILES_DIR/$file" "$HOME/$file"
