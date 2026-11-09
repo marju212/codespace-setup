@@ -17,7 +17,7 @@ apt_retry() {
     return 1
 }
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 LOCAL_BIN="$HOME/.local/bin"
 
 case ":$PATH:" in
@@ -148,9 +148,10 @@ fi
 echo ""
 echo "==> Configuring global MCP servers..."
 if command -v claude &> /dev/null; then
-    claude mcp add --scope global memory -- npx -y @modelcontextprotocol/server-memory 2>/dev/null && echo "    Added memory MCP" || true
-    claude mcp add --scope global filesystem -- npx -y @modelcontextprotocol/server-filesystem /workspaces 2>/dev/null && echo "    Added filesystem MCP" || true
-    claude mcp add --scope global github -- npx -y @modelcontextprotocol/server-github 2>/dev/null && echo "    Added github MCP" || true
+    # Re-adding an existing server errors; ignore that so re-runs stay idempotent
+    claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory 2>/dev/null && echo "    Added memory MCP" || true
+    claude mcp add --scope user filesystem -- npx -y @modelcontextprotocol/server-filesystem /workspaces 2>/dev/null && echo "    Added filesystem MCP" || true
+    claude mcp add --scope user github -- npx -y @modelcontextprotocol/server-github 2>/dev/null && echo "    Added github MCP" || true
 else
     echo "    Skipping MCP setup (Claude Code not installed)"
 fi
